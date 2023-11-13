@@ -84,7 +84,7 @@ input {
     border: none;
 }
 
-.buttons {
+.basicButtons {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     flex-grow: 1;
@@ -92,7 +92,20 @@ input {
     margin-bottom: 20px;
 }
 
-.buttons button {
+.complexButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    flex-grow: 1;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.complexButtons button {
+    border: 2px solid rgb(60, 60, 60);
+    border-radius: 15px 15px 15px 15px;
+}
+
+.basicButtons button {
     border: 2px solid rgb(60, 60, 60);
     border-radius: 15px 15px 15px 15px;
 }
@@ -102,7 +115,6 @@ input {
 }
 
 .greyButton {
-    /*    background-color: lightslategray*/
     background-color: rgb(142, 147, 167);
 }
 

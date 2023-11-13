@@ -1,4 +1,4 @@
-﻿const buttons = document.querySelectorAll('.buttons button');
+﻿const buttons = document.querySelectorAll('.basicButtons button');
 const inputEl = document.querySelector('input');
 const output = document.querySelector('#output');
 const historyContainer = document.querySelector('.historyContainer');
