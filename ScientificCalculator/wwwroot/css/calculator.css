@@ -31,10 +31,7 @@ h6 {
 
 #calculator {
     overflow: none;
-/*    width: 100vw;
-    height: 100vh;*/
     background-color: rgb(40, 40, 40);
-/*    box-shadow: 0 0 4px rgb(0, 0, 0);*/
     display: grid;
     grid-template-columns: 1fr 250px;
 }

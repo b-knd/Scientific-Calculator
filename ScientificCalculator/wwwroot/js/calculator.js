@@ -7,6 +7,8 @@
 
     const STORAGE_NAME = 'history_v4';
 
+    localStorage.clear();
+
     if (localStorage.getItem(STORAGE_NAME) == null) {
         localStorage.setItem(STORAGE_NAME, JSON.stringify([]));
     }
@@ -51,8 +53,14 @@
 
     function preprocessInput(input) {
         // Replace 'x' with '*' and '÷' with '/'
-        return input.replace(/x/g, '*').replace(/÷/g, '/');
+        let processedInput = input.replace(/x/g, '*').replace(/÷/g, '/');
+
+        // Add brackets around numerical values after sin, cos, tan, log, and ln
+        processedInput = processedInput.replace(/(sin|cos|tan|log|ln)(\d+)/gi, '$1($2)');
+
+        return processedInput;
     }
+
 
     // When an output is evaluated, save expression and output to history
     function saveToHistory(expression, result) {
@@ -86,12 +94,6 @@
             div.addEventListener('pointerdown', function () {
                 inputEl.value = historyElements[i].expression;
             });
-        }
-
-        // Clear old history items beyond the maximum limit
-        if (historyElements.length > MAX_HISTORY_ITEMS) {
-            const newHistory = historyElements.slice(startIndex);
-            localStorage.setItem(STORAGE_NAME, JSON.stringify(newHistory));
         }
     }
 
