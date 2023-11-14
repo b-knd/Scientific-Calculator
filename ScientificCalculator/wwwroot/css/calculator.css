@@ -3,10 +3,15 @@
     padding: 0.5em;
 }
 
-#output {
-    text-align: right;
+#input {
+    text-align: left;
     background-color: rgb(30, 30, 30);
     margin-bottom: 10px;
+}
+
+
+#output {
+    text-align: center;
 }
 
 * {
@@ -119,6 +124,8 @@ input {
     color: black;
     background-color: whitesmoke;
 }
+
+
 
 .historyItem {
     border-bottom: 1px solid rgb(100, 100, 100);

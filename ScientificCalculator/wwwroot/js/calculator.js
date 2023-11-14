@@ -1,13 +1,12 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
     // Constant variables to store all the elements
     const buttons = document.querySelectorAll('.buttons button');
+    const inputDis = document.getElementById('output');
+    //let inputEl.value = ''
     const inputEl = document.getElementById('input');
-    const outputEl = document.getElementById('output');
     const historyContainer = document.querySelector('.historyContainer');
 
     const STORAGE_NAME = 'history_v4';
-
-    localStorage.clear();
 
     if (localStorage.getItem(STORAGE_NAME) == null) {
         localStorage.setItem(STORAGE_NAME, JSON.stringify([]));
@@ -25,40 +24,107 @@
 
             if (symbol === '=') {
                 evaluateExpression();
-            } else if (symbol === 'DEL') {
-                inputEl.value = inputEl.value.slice(0, -1);
             } else if (symbol === 'CLR') {
+                inputDis.value = '';
+                //inputEl.value = '';
                 inputEl.value = '';
-                outputEl.value = '';
             } else {
-                inputEl.value += symbol;
+                if (symbol === 'DEL') {
+                    //inputDis.value = inputDis.value.slice(0, -1);
+                    inputEl.value = inputEl.value.slice(0, -1);
+                } else if (symbol === 'sin' || symbol === 'cos' || symbol === 'tan' || symbol === 'log' || symbol === 'ln') {
+                    //inputDis.value += `${symbol}(`;
+                    inputEl.value += `${symbol}(`;
+                } else if (symbol === 'x!') {
+                    //inputDis.value += '!';
+                    inputEl.value += '!';
+                } else if (symbol === '(-)') {
+                    //inputDis.value += '-';
+                    inputEl.value += '-';
+                } else if (symbol === '√x') {
+                    //inputDis.value += '√(';
+                    inputEl.value += 'sqrt(';
+                } else if (symbol === 'x2') {
+                    //inputDis.value += '^2';
+                    inputEl.value += '^2';
+                } else if (symbol === 'xY') {
+                    //inputDis.value += '^(';
+                    inputEl.value += '^(';
+                } else if (symbol === 'x-1') {
+                    //inputDis.value += '^(';
+                    inputEl.value += '^(-1)';
+                } else if (['+', '-', '×', '÷'].includes(symbol)) {
+                    // Add space before and after the operator
+                    inputEl.value += ` ${symbol} `;
+                } else {
+                    //inputDis.value += symbol;
+                    inputEl.value += symbol;
+                    console.log("number clicked:", symbol);
+                }
+                console.log("calling intermediate function");
+                evaluateIntermediate();
             }
         });
     }
 
+
+
+    // Function to be called when '=' is clicked on
+    // Basically, evaluate the input and show the result as output
+    // Function to be called when a button is clicked (except '=')
+    function evaluateIntermediate() {
+        try {
+            // Replace 'x' with '*' before evaluation
+            const expression = inputEl.value;
+            console.log("expression:", expression);
+            const result = mathPro.evaluate(expression);
+            console.log('Intermediate Result:', result); // Add this line for debugging
+
+            // Update the inputDis field with the formatted expression using MathJax
+            inputDis.value = expression + ' = ' + result;
+        } catch (error) {
+            try {
+                const expression = inputEl.value;
+                const trial = expression + ')';
+                const result = mathPro.evaluate(trial);
+                inputDis.value = trial + ' = ' + result;
+            } catch (error) {
+                inputDis.value = inputEl.value;
+            }
+        }
+    }
+
+    // Function to update inputDis with MathJax typesetting
+    function updateInputDisplayed(content) {
+        const inputDis = document.getElementById('input');
+        inputDis.textContent = content;
+    }
+
+   
     // Function to be called when '=' is clicked on
     // Basically, evaluate the input and show the result as output
     function evaluateExpression() {
         try {
             // Replace 'x' with '*' before evaluation
-            const expression = preprocessInput(inputEl.value);
+            const expression = inputEl.value;
+            console.log("expression:", expression);
             const result = mathPro.evaluate(expression);
-            outputEl.value = result;
+            console.log('Intermediate Result:', result); // Add this line for debugging
+
+            // Update the inputDis field with the formatted expression using MathJax
+            inputDis.value = expression + ' = ' + result;
             saveToHistory(inputEl.value, result);
             refreshHistory();
         } catch (error) {
-            outputEl.value = 'Syntax Error';
+            try {
+                const trial = expression + ')';
+                const result = mathPro.evaluate(expression);
+                inputDis.value = trial + ' = ' + result;
+            } catch (error) {
+                inputDis.value = '';
+                inputEl.value = 'Syntax Error';
+            }
         }
-    }
-
-    function preprocessInput(input) {
-        // Replace 'x' with '*' and '÷' with '/'
-        let processedInput = input.replace(/x/g, '*').replace(/÷/g, '/');
-
-        // Add brackets around numerical values after sin, cos, tan, log, and ln
-        processedInput = processedInput.replace(/(sin|cos|tan|log|ln)(\d+)/gi, '$1($2)');
-
-        return processedInput;
     }
 
 
