@@ -88,6 +88,29 @@ input {
     border: none;
 }
 
+.angleFormat {
+    font-size: 80%;
+    display: flex;
+    align-self: flex-start;
+    margin-top: 15px;
+    margin-bottom: 19px;
+}
+
+.angleFormat button {
+    color: white;
+    font-size: 100%;
+    border: 2px solid rgb(60, 60, 60);
+    padding: 5px 10px;
+}
+
+#radButton {
+    border-radius: 15px 0px 0px 15px;
+}
+
+#degButton {
+    border-radius: 0px 15px 15px 0px;
+}
+
 .buttons {
     display: grid;
     grid-template-columns: 1fr 1fr;

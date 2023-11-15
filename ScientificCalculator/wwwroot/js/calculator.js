@@ -12,6 +12,44 @@
         localStorage.setItem(STORAGE_NAME, JSON.stringify([]));
     }
 
+    const radButton = document.getElementById('radButton');
+    const degButton = document.getElementById('degButton');
+
+    // Set the default angle mode to radians
+    let selectedAngleMode = 'radians';
+    updateAngleModeStyles();
+
+    // Function to update the angle mode styles based on the selected mode
+    function updateAngleModeStyles() {
+        if (selectedAngleMode === 'radians') {
+            radButton.style.backgroundColor = 'white';
+            radButton.style.color = 'black';
+            degButton.style.backgroundColor = ''; // Reset to default background color
+            degButton.style.color = ''; // Reset to default text color
+        } else {
+            // Assume the default is degrees
+            degButton.style.backgroundColor = 'white';
+            degButton.style.color = 'black';
+            radButton.style.backgroundColor = ''; // Reset to default background color
+            radButton.style.color = ''; // Reset to default text color
+        }
+    }
+
+    // Event listener for the radian button
+    radButton.addEventListener('click', function () {
+        selectedAngleMode = 'radians';
+        updateAngleModeStyles();
+        // Handle other actions as needed
+    });
+
+    // Event listener for the degree button
+    degButton.addEventListener('click', function () {
+        selectedAngleMode = 'degrees';
+        updateAngleModeStyles();
+        // Handle other actions as needed
+    });
+
+
     // Create a math.js instance
     const mathPro = math.create();
 
