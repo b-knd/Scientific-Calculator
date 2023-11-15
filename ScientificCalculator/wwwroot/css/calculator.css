@@ -24,7 +24,7 @@ h6 {
 
 #calculator {
     font-family: 'Ubuntu Mono', monospace;
-    font-size: 200%;
+    font-size: 150%;
     margin: 0;
     background-color: rgb(50, 50, 50);
     color: white;
@@ -51,6 +51,7 @@ h6 {
     display: flex;
     flex-direction: column;
     margin-left: 10px;
+    align-self: flex-start;
 }
 
 .rightSide h4 {
@@ -65,6 +66,7 @@ h1, h2, h3, h4, h5, h6 {
 @media screen and (max-width: 700px) {
     .rightSide {
         display: none;
+
     }
     .container {
         grid-template-columns: 1fr;
@@ -84,6 +86,12 @@ input {
     color: inherit;
     background-color: inherit;
     border: none;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
 .basicButtons {
@@ -124,7 +132,6 @@ input {
     color: black;
     background-color: whitesmoke;
 }
-
 
 
 .historyItem {

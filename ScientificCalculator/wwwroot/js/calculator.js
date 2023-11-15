@@ -28,43 +28,77 @@
                 inputDis.value = '';
                 //inputEl.value = '';
                 inputEl.value = '';
+            } else if (symbol === 'S⇔D') {
+
             } else {
+                if (inputEl.value === 'Syntax Error') {
+                    inputEl.value = '';
+                }
                 if (symbol === 'DEL') {
                     //inputDis.value = inputDis.value.slice(0, -1);
                     inputEl.value = inputEl.value.slice(0, -1);
-                } else if (symbol === 'sin' || symbol === 'cos' || symbol === 'tan' || symbol === 'log' || symbol === 'ln') {
-                    //inputDis.value += `${symbol}(`;
+                } else if (symbol === 'sin' || symbol === 'cos' || symbol === 'tan' || symbol === 'log' || symbol === 'ln'
+                    || symbol === 'sinh' || symbol === 'tanh' || symbol === 'cosh' || symbol === 'abs') {
                     inputEl.value += `${symbol}(`;
+                } else if (symbol === 'sin-1') {
+                    inputEl.value += 'asin(';
+                } else if (symbol === 'cos-1') {
+                    inputEl.value += 'acos(';
+                } else if (symbol === 'tan-1') {
+                    inputEl.value += 'atan(';
+                } else if (symbol === 'x') {
+                    inputEl.value += '*';
+                } else if (symbol === '÷') {
+                    inputEl.value += '/';
                 } else if (symbol === 'x!') {
-                    //inputDis.value += '!';
                     inputEl.value += '!';
                 } else if (symbol === '(-)') {
-                    //inputDis.value += '-';
                     inputEl.value += '-';
                 } else if (symbol === '√x') {
-                    //inputDis.value += '√(';
                     inputEl.value += 'sqrt(';
+                } else if (symbol === '∛x') {
+                    inputEl.value += 'cbrt(';
                 } else if (symbol === 'x2') {
-                    //inputDis.value += '^2';
                     inputEl.value += '^2';
                 } else if (symbol === 'xY') {
-                    //inputDis.value += '^(';
                     inputEl.value += '^(';
+                } else if (symbol === 'ex') {
+                    inputEl.value += 'e^';
                 } else if (symbol === 'x-1') {
-                    //inputDis.value += '^(';
                     inputEl.value += '^(-1)';
-                } else if (['+', '-', '×', '÷'].includes(symbol)) {
-                    // Add space before and after the operator
-                    inputEl.value += ` ${symbol} `;
+                } else if (symbol === 'nPr') {
+                    inputEl.value += 'P';
+                } else if (symbol === 'nCr') {
+                    inputEl.value += 'C';
                 } else {
-                    //inputDis.value += symbol;
                     inputEl.value += symbol;
-                    console.log("number clicked:", symbol);
                 }
-                console.log("calling intermediate function");
                 evaluateIntermediate();
             }
         });
+    }
+
+    function formatExpressionForDisplay(expression) {
+        let formattedExpression = expression;
+
+        // Add space between operators
+        formattedExpression = formattedExpression.replace(/(\d+|\)|π|!|%)([+\-*/])/g, '$1 $2 ');
+        // Replace '*' with 'x'
+        formattedExpression = formattedExpression.replace(/\*/g, 'x');
+        // Replace '/' with '÷'
+        formattedExpression = formattedExpression.replace(/\//g, '÷');
+        // Replace 'sqrt' with '√'
+        formattedExpression = formattedExpression.replace(/sqrt()/g, '√');
+        // Replace 'cbrt' with '∛'
+        formattedExpression = formattedExpression.replace(/cbrt()/g, '∛');
+
+        return formattedExpression;
+    }
+
+    function formatExpressionForEvaluation(expression) {
+        formattedExpression = expression.replace(/log/g, 'log10').replace(/ln/g, 'log').replace(/π/g, 'pi').replace(/(\d+)%/g, '($1/100)');
+
+        return formattedExpression;
     }
 
 
@@ -76,28 +110,45 @@
         try {
             // Replace 'x' with '*' before evaluation
             const expression = inputEl.value;
-            console.log("expression:", expression);
-            const result = mathPro.evaluate(expression);
+            console.log("expression:", formatExpressionForEvaluation(expression));
+            const result = evaluateExp(formatExpressionForEvaluation(expression));
             console.log('Intermediate Result:', result); // Add this line for debugging
 
             // Update the inputDis field with the formatted expression using MathJax
-            inputDis.value = expression + ' = ' + result;
+            inputDis.value = formatExpressionForDisplay(expression + ' = ' + result);
         } catch (error) {
             try {
                 const expression = inputEl.value;
                 const trial = expression + ')';
-                const result = mathPro.evaluate(trial);
-                inputDis.value = trial + ' = ' + result;
+                const result = evaluateExp(formatExpressionForEvaluation(trial));
+                inputDis.value = formatExpressionForDisplay(trial + ' = ' + result);
             } catch (error) {
-                inputDis.value = inputEl.value;
+                inputDis.value = formatExpressionForDisplay(inputEl.value);
             }
         }
     }
 
-    // Function to update inputDis with MathJax typesetting
-    function updateInputDisplayed(content) {
-        const inputDis = document.getElementById('input');
-        inputDis.textContent = content;
+    function evaluateExp(expression) {
+        const match = expression.match(/(\d+)([PC])(\d+)/);
+
+        if (!match) {
+            // If the expression doesn't match the pattern, use the regular math.evaluate
+            return mathPro.evaluate(expression);
+        }
+
+        const n = parseInt(match[1]);
+        const operation = match[2];
+        const m = parseInt(match[3]);
+
+        if (operation === 'P') {
+            // Permutation: nPm = n! / (n-m)!
+            return mathPro.evaluate(`factorial(${n}) / factorial(${n} - ${m})`);
+        } else if (operation === 'C') {
+            // Combination: nCm = n! / (m! * (n-m)!)
+            return mathPro.evaluate(`factorial(${n}) / (factorial(${m}) * factorial(${n} - ${m}))`);
+        } else {
+            return Error;
+        }
     }
 
    
@@ -108,19 +159,28 @@
             // Replace 'x' with '*' before evaluation
             const expression = inputEl.value;
             console.log("expression:", expression);
-            const result = mathPro.evaluate(expression);
+            const result = evaluateExp(formatExpressionForEvaluation(expression));
             console.log('Intermediate Result:', result); // Add this line for debugging
 
-            // Update the inputDis field with the formatted expression using MathJax
-            inputDis.value = expression + ' = ' + result;
+            // Update the inputDis field with the formatted expression using Mathjax
+            console.log('formatted', formatExpressionForDisplay(expression + ' = ' + result));
             saveToHistory(inputEl.value, result);
             refreshHistory();
+            inputDis.value = formatExpressionForDisplay(expression + ' = ' + result);
+            inputEl.value = result;
+            
         } catch (error) {
+            console.log(error);
             try {
+                const expression = inputEl.value;
                 const trial = expression + ')';
-                const result = mathPro.evaluate(expression);
-                inputDis.value = trial + ' = ' + result;
+                const result = evaluateExp(formatExpressionForEvaluation(trial));
+                saveToHistory(inputEl.value, result);
+                refreshHistory();
+                inputDis.value = formatExpressionForDisplay(trial + ' = ' + result);
+                inputEl.value = result;
             } catch (error) {
+                console.log(error);
                 inputDis.value = '';
                 inputEl.value = 'Syntax Error';
             }
@@ -166,4 +226,5 @@
     function truncate(str, maxLength) {
         return str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
     }
+
 });
