@@ -9,7 +9,6 @@
     margin-bottom: 10px;
 }
 
-
 #output {
     text-align: center;
 }
@@ -50,7 +49,7 @@ h6 {
     background-color: rgb(50, 50, 50);
     display: flex;
     flex-direction: column;
-    margin-left: 10px;
+    margin-left: 25px;
     align-self: flex-start;
 }
 
@@ -88,27 +87,37 @@ input {
     border: none;
 }
 
-.angleFormat {
+.modeButtons {
+    display: flex;
+
+}
+
+.angleFormat, .fracDec, .numSys {
     font-size: 80%;
     display: flex;
     align-self: flex-start;
     margin-top: 15px;
     margin-bottom: 19px;
+    margin-right: 20px;
 }
 
-.angleFormat button {
+.angleFormat button, .fracDec button, .numSys button {
     color: white;
     font-size: 100%;
     border: 2px solid rgb(60, 60, 60);
-    padding: 5px 10px;
+    padding: 0px 10px;
 }
 
-#radButton {
-    border-radius: 15px 0px 0px 15px;
+.leftButton {
+    border-radius: 10px 0px 0px 10px;
 }
 
-#degButton {
-    border-radius: 0px 15px 15px 0px;
+.rightButton {
+    border-radius: 0px 10px 10px 0px;
+}
+
+.middleButton {
+    border-radius: 0px 0px 0px 0px;
 }
 
 .buttons {

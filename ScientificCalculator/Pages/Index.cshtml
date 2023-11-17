@@ -21,9 +21,23 @@
             <input type="text" id="output" disabled="true">
             <input type="text" id="input" placeholder="Input">
 
-            <div class="angleFormat">
-                <button id="radButton">RAD</button>
-                <button id="degButton">DEG</button>
+            <div class="modeButtons">
+                <div class="angleFormat">
+                    <button id="radButton" class="leftButton">RAD</button>
+                    <button id="degButton" class="rightButton">DEG</button>
+                </div>
+
+                <div class="fracDec">
+                    <button id="fracButton" class="leftButton">FRAC</button>
+                    <button id="deciButton" class="rightButton">DEC</button>
+                </div>
+
+                <div class="numSys">
+                    <button id="binButton" class="leftButton">BIN</button>
+                    <button id="octButton" class="middleButton">OCT</button>
+                    <button id="hexButton" class="middleButton">HEX</button>
+                    <button id="decButton" class="rightButton">DEC</button>
+                </div>
             </div>
 
             <div class="buttons">

@@ -2,7 +2,7 @@
     // Constant variables to store all the elements
     const buttons = document.querySelectorAll('.buttons button');
     const inputDis = document.getElementById('output');
-    //let inputEl.value = ''
+    let previousAns = '';
     const inputEl = document.getElementById('input');
     const historyContainer = document.querySelector('.historyContainer');
 
@@ -22,16 +22,10 @@
     // Function to update the angle mode styles based on the selected mode
     function updateAngleModeStyles() {
         if (selectedAngleMode === 'radians') {
-            radButton.style.backgroundColor = 'white';
-            radButton.style.color = 'black';
-            degButton.style.backgroundColor = ''; // Reset to default background color
-            degButton.style.color = ''; // Reset to default text color
+            changeButtonsStyle(radButton, degButton);
         } else {
             // Assume the default is degrees
-            degButton.style.backgroundColor = 'white';
-            degButton.style.color = 'black';
-            radButton.style.backgroundColor = ''; // Reset to default background color
-            radButton.style.color = ''; // Reset to default text color
+            changeButtonStyle(degButton, radButton);
         }
     }
 
@@ -49,6 +43,13 @@
         // Handle other actions as needed
     });
 
+    function changeButtonsStyle(button1, button2) {
+        button1.style.backgroundColor = 'linen';
+        button1.style.color = 'darkslategray';
+        button2.style.backgroundColor = ''; // Reset to default background color
+        button2.style.color = ''; // Reset to default text color
+    }
+
 
     // Create a math.js instance
     const mathPro = math.create();
@@ -64,9 +65,10 @@
                 evaluateExpression();
             } else if (symbol === 'CLR') {
                 inputDis.value = '';
-                //inputEl.value = '';
                 inputEl.value = '';
-            } else if (symbol === 'S⇔D') {
+            } else if (symbol === 'Ans') {
+                inputEl.value += previousAns;
+            }else if (symbol === 'S⇔D') {
 
             } else {
                 if (inputEl.value === 'Syntax Error') {
@@ -130,11 +132,21 @@
         // Replace 'cbrt' with '∛'
         formattedExpression = formattedExpression.replace(/cbrt()/g, '∛');
 
+        if (selectedAngleMode === 'degrees') {
+            // If in degrees mode, add the degree symbol to numbers in trigonometric functions
+            formattedExpression = formattedExpression.replace(/\b(sin|cos|tan|atan|acos|asin)\((\d+)\)/g, (match, func, number) => `${func}(${number}°)`);
+        }
+
         return formattedExpression;
     }
 
     function formatExpressionForEvaluation(expression) {
         formattedExpression = expression.replace(/log/g, 'log10').replace(/ln/g, 'log').replace(/π/g, 'pi').replace(/(\d+)%/g, '($1/100)');
+
+        if (selectedAngleMode === 'degrees') {
+            // If in degrees mode, convert numbers in trigonometric functions to radians
+            formattedExpression = formattedExpression.replace(/\b(sin|cos|tan|atan|acos|asin)\((.*?)\)/g, (match, func, content) => `${func}(${content} * pi / 180)`);
+        }
 
         return formattedExpression;
     }
@@ -206,17 +218,18 @@
             refreshHistory();
             inputDis.value = formatExpressionForDisplay(expression + ' = ' + result);
             inputEl.value = result;
-            
+            previousAns = result;
         } catch (error) {
             console.log(error);
             try {
                 const expression = inputEl.value;
                 const trial = expression + ')';
                 const result = evaluateExp(formatExpressionForEvaluation(trial));
-                saveToHistory(inputEl.value, result);
+                saveToHistory(trial, result);
                 refreshHistory();
                 inputDis.value = formatExpressionForDisplay(trial + ' = ' + result);
                 inputEl.value = result;
+                previousAns = result;
             } catch (error) {
                 console.log(error);
                 inputDis.value = '';
