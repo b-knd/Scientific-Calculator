@@ -19,13 +19,20 @@
     let selectedAngleMode = 'radians';
     updateAngleModeStyles();
 
+    function changeButtonsStyle(button1, button2) {
+        button1.style.backgroundColor = 'linen';
+        button1.style.color = 'darkslategray';
+        button2.style.backgroundColor = ''; // Reset to default background color
+        button2.style.color = ''; // Reset to default text color
+    }
+
     // Function to update the angle mode styles based on the selected mode
     function updateAngleModeStyles() {
         if (selectedAngleMode === 'radians') {
             changeButtonsStyle(radButton, degButton);
         } else {
             // Assume the default is degrees
-            changeButtonStyle(degButton, radButton);
+            changeButtonsStyle(degButton, radButton);
         }
     }
 
@@ -43,12 +50,93 @@
         // Handle other actions as needed
     });
 
-    function changeButtonsStyle(button1, button2) {
+    const fracButton = document.getElementById('fracButton');
+    const deciButton = document.getElementById('deciButton');
+
+    // Set the default angle mode to radians
+    let selectedFracDec = 'dec';
+    updateFrac();
+
+    // Function to update the angle mode styles based on the selected mode
+    function updateFrac() {
+        if (selectedFracDec === 'frac') {
+            changeButtonsStyle(fracButton, deciButton);
+        } else {
+            // Assume the default is degrees
+            changeButtonsStyle(deciButton, fracButton);
+        }
+    }
+
+    // Event listener for the radian button
+    fracButton.addEventListener('click', function () {
+        selectedFracDec = 'frac';
+        updateFrac();
+        // Handle other actions as needed
+    });
+
+    // Event listener for the degree button
+    deciButton.addEventListener('click', function () {
+        selectedFracDec = 'dec';
+        updateFrac();
+        // Handle other actions as needed
+    });
+
+    const binButton = document.getElementById('binButton');
+    const octButton = document.getElementById('octButton');
+    const hexButton = document.getElementById('hexButton');
+    const decButton = document.getElementById('decButton');
+
+    // Set the default angle mode to radians
+    let selectedNumSys = 'dec';
+    updateNumSys();
+
+    function styleNumSysButtons(button1, button2, button3, button4) {
         button1.style.backgroundColor = 'linen';
         button1.style.color = 'darkslategray';
         button2.style.backgroundColor = ''; // Reset to default background color
         button2.style.color = ''; // Reset to default text color
+        button3.style.backgroundColor = ''; // Reset to default background color
+        button3.style.color = ''; // Reset to default text color
+        button4.style.backgroundColor = ''; // Reset to default background color
+        button4.style.color = ''; // Reset to default text color
     }
+
+    // Function to update the angle mode styles based on the selected mode
+    function updateNumSys() {
+        if (selectedNumSys === 'dec') {
+            styleNumSysButtons(decButton, octButton, hexButton, binButton);
+        } else if (selectedNumSys === 'bin') {
+            styleNumSysButtons(binButton, octButton, hexButton, decButton);
+        } else if (selectedNumSys === 'oct') {
+            styleNumSysButtons(octButton, decButton, hexButton, binButton);
+        } else {
+            styleNumSysButtons(hexButton, octButton, decButton, binButton);
+        }
+    }
+
+    // Event listener for the radian button
+    binButton.addEventListener('click', function () {
+        selectedNumSys = 'bin';
+        updateNumSys();
+    });
+
+    // Event listener for the degree button
+    decButton.addEventListener('click', function () {
+        selectedFracDec = 'dec';
+        updateNumSys();
+    });
+
+    // Event listener for the degree button
+    hexButton.addEventListener('click', function () {
+        selectedFracDec = 'hex';
+        updateNumSys();
+    });
+
+    // Event listener for the degree button
+    octButton.addEventListener('click', function () {
+        selectedFracDec = 'oct';
+        updateNumSys();
+    });
 
 
     // Create a math.js instance
@@ -182,6 +270,9 @@
         const match = expression.match(/(\d+)([PC])(\d+)/);
 
         if (!match) {
+            if (expression.match(/(\d+)([PC])/) || expression.match(/([PC])/)) {
+                throw Error;
+            }
             // If the expression doesn't match the pattern, use the regular math.evaluate
             return mathPro.evaluate(expression);
         }
