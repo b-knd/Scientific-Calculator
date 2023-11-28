@@ -3,6 +3,8 @@
     const buttons = document.querySelectorAll('.buttons button');
     const inputDis = document.getElementById('output');
     let previousAns = '';
+    let memoryStack = 0;
+    let intermediateResult = '';
     const inputEl = document.getElementById('input');
     const historyContainer = document.querySelector('.historyContainer');
 
@@ -86,10 +88,6 @@
     const hexButton = document.getElementById('hexButton');
     const decButton = document.getElementById('decButton');
 
-    // Set the default angle mode to radians
-    let selectedNumSys = 'dec';
-    updateNumSys();
-
     function styleNumSysButtons(button1, button2, button3, button4) {
         button1.style.backgroundColor = 'linen';
         button1.style.color = 'darkslategray';
@@ -105,14 +103,26 @@
     function updateNumSys() {
         if (selectedNumSys === 'dec') {
             styleNumSysButtons(decButton, octButton, hexButton, binButton);
-        } else if (selectedNumSys === 'bin') {
-            styleNumSysButtons(binButton, octButton, hexButton, decButton);
-        } else if (selectedNumSys === 'oct') {
-            styleNumSysButtons(octButton, decButton, hexButton, binButton);
+            for (let button of buttons) {
+                button.disabled = false;
+            }
         } else {
-            styleNumSysButtons(hexButton, octButton, decButton, binButton);
+            //for (let button of buttons) {
+            //    button.disabled = true;
+            //}
+            if (selectedNumSys === 'bin') {
+                styleNumSysButtons(binButton, octButton, hexButton, decButton);
+            } else if (selectedNumSys === 'oct') {
+                styleNumSysButtons(octButton, decButton, hexButton, binButton);
+            } else {
+                styleNumSysButtons(hexButton, octButton, decButton, binButton);
+            }
         }
     }
+
+    // Set the default angle mode to radians
+    let selectedNumSys = 'dec';
+    updateNumSys();
 
     // Event listener for the radian button
     binButton.addEventListener('click', function () {
@@ -122,19 +132,19 @@
 
     // Event listener for the degree button
     decButton.addEventListener('click', function () {
-        selectedFracDec = 'dec';
+        selectedNumSys = 'dec';
         updateNumSys();
     });
 
     // Event listener for the degree button
     hexButton.addEventListener('click', function () {
-        selectedFracDec = 'hex';
+        selectedNumSys = 'hex';
         updateNumSys();
     });
 
     // Event listener for the degree button
     octButton.addEventListener('click', function () {
-        selectedFracDec = 'oct';
+        selectedNumSys = 'oct';
         updateNumSys();
     });
 
@@ -143,6 +153,17 @@
     const mathPro = math.create();
 
     refreshHistory();
+
+    function insertAtCaret(textarea, value) {
+        const startPos = textarea.selectionStart;
+        const endPos = textarea.selectionEnd;
+
+        textarea.value = textarea.value.substring(0, startPos) + value + textarea.value.substring(endPos, textarea.value.length);
+        textarea.selectionStart = startPos + value.length;
+        textarea.selectionEnd = startPos + value.length;
+        textarea.focus();
+    }
+
 
     for (let button of buttons) {
         // Add listener to function buttons
@@ -154,52 +175,73 @@
             } else if (symbol === 'CLR') {
                 inputDis.value = '';
                 inputEl.value = '';
-            } else if (symbol === 'Ans') {
-                inputEl.value += previousAns;
-            }else if (symbol === 'S⇔D') {
+            } else if (symbol === 'S⇔D') {
 
             } else {
                 if (inputEl.value === 'Syntax Error') {
                     inputEl.value = '';
                 }
                 if (symbol === 'DEL') {
-                    //inputDis.value = inputDis.value.slice(0, -1);
-                    inputEl.value = inputEl.value.slice(0, -1);
+                    const startPos = textarea.selectionStart;
+                    const endPos = textarea.selectionEnd;
+
+                    if (startPos === endPos) {
+                        // If no text is selected, delete the character to the left of the caret
+                        textarea.value = textarea.value.substring(0, startPos - 1) + textarea.value.substring(endPos, textarea.value.length);
+                        textarea.selectionStart = startPos - 1;
+                        textarea.selectionEnd = startPos - 1;
+                    } else {
+                        // If text is selected, delete the selected text
+                        textarea.value = textarea.value.substring(0, startPos) + textarea.value.substring(endPos, textarea.value.length);
+                        textarea.selectionStart = startPos;
+                        textarea.selectionEnd = startPos;
+                    }
+                } else if (symbol === 'Ans') {
+                    insertAtCaret(inputEl, previousAns);
+                } else if (symbol === 'MR') {
+                    inputDis.value += memoryStack;
+                    insertAtCaret(inputEl, memoryStack);
                 } else if (symbol === 'sin' || symbol === 'cos' || symbol === 'tan' || symbol === 'log' || symbol === 'ln'
                     || symbol === 'sinh' || symbol === 'tanh' || symbol === 'cosh' || symbol === 'abs') {
-                    inputEl.value += `${symbol}(`;
+                    insertAtCaret(inputEl, `${symbol}(`);
                 } else if (symbol === 'sin-1') {
-                    inputEl.value += 'asin(';
+                    insertAtCaret(inputEl, 'asin(');
                 } else if (symbol === 'cos-1') {
-                    inputEl.value += 'acos(';
+                    insertAtCaret(inputEl, 'acos(')
                 } else if (symbol === 'tan-1') {
-                    inputEl.value += 'atan(';
+                    insertAtCaret(inputEl, 'atan(')
+                } else if (symbol === 'dy/dx') {
+                    insertAtCaret(inputEl, 'derivative(\'\', \'x\')');
                 } else if (symbol === 'x') {
-                    inputEl.value += '*';
+                    insertAtCaret(inputEl, '*');
                 } else if (symbol === '÷') {
-                    inputEl.value += '/';
+                    insertAtCaret(inputEl, '/');
                 } else if (symbol === 'x!') {
-                    inputEl.value += '!';
+                    insertAtCaret(inputEl, '!');
                 } else if (symbol === '(-)') {
-                    inputEl.value += '-';
+                    insertAtCaret(inputEl, '-');
                 } else if (symbol === '√x') {
-                    inputEl.value += 'sqrt(';
+                    insertAtCaret(inputEl, 'sqrt(');
                 } else if (symbol === '∛x') {
-                    inputEl.value += 'cbrt(';
+                    insertAtCaret(inputEl, 'cbrt(');
                 } else if (symbol === 'x2') {
-                    inputEl.value += '^2';
+                    insertAtCaret(inputEl, '^2');
                 } else if (symbol === 'xY') {
-                    inputEl.value += '^(';
+                    insertAtCaret(inputEl, '^(');
                 } else if (symbol === 'ex') {
-                    inputEl.value += 'e^';
+                    insertAtCaret(inputEl, 'e^');
                 } else if (symbol === 'x-1') {
-                    inputEl.value += '^(-1)';
+                    insertAtCaret(inputEl, '^(-1)');
                 } else if (symbol === 'nPr') {
-                    inputEl.value += 'P';
+                    insertAtCaret(inputEl, 'P');
                 } else if (symbol === 'nCr') {
-                    inputEl.value += 'C';
+                    insertAtCaret(inputEl, 'C');
+                } else if (symbol === 'M+') {
+                    memoryStack += intermediateResult;
+                } else if (symbol === 'M-') {
+                    memoryStack -= intermediateResult;
                 } else {
-                    inputEl.value += symbol;
+                    insertAtCaret(inputEl, symbol);
                 }
                 evaluateIntermediate();
             }
@@ -207,18 +249,17 @@
     }
 
     function formatExpressionForDisplay(expression) {
-        let formattedExpression = expression;
+        let formattedExpression = expression.replace(/\s/g, '');
 
         // Add space between operators
-        formattedExpression = formattedExpression.replace(/(\d+|\)|π|!|%)([+\-*/])/g, '$1 $2 ');
-        // Replace '*' with 'x'
-        formattedExpression = formattedExpression.replace(/\*/g, 'x');
-        // Replace '/' with '÷'
-        formattedExpression = formattedExpression.replace(/\//g, '÷');
+        formattedExpression = formattedExpression.replace(/(\S+)([=])/g, '$1 $2 ');
         // Replace 'sqrt' with '√'
         formattedExpression = formattedExpression.replace(/sqrt()/g, '√');
         // Replace 'cbrt' with '∛'
         formattedExpression = formattedExpression.replace(/cbrt()/g, '∛');
+        formattedExpression = formattedExpression.replace(/derivative\(\'(\S+)\',\s*\'([a-z])\'\)/g, 'd($1)/d$2');
+
+        console.log(formattedExpression);
 
         if (selectedAngleMode === 'degrees') {
             // If in degrees mode, add the degree symbol to numbers in trigonometric functions
@@ -246,20 +287,26 @@
     // Function to be called when a button is clicked (except '=')
     function evaluateIntermediate() {
         try {
+            if (inputEl.value === '') {
+                throw error;
+            }
             // Replace 'x' with '*' before evaluation
             const expression = inputEl.value;
             console.log("expression:", formatExpressionForEvaluation(expression));
             const result = evaluateExp(formatExpressionForEvaluation(expression));
             console.log('Intermediate Result:', result); // Add this line for debugging
+            intermediateResult = result;
 
             // Update the inputDis field with the formatted expression using MathJax
             inputDis.value = formatExpressionForDisplay(expression + ' = ' + result);
+
         } catch (error) {
             try {
                 const expression = inputEl.value;
                 const trial = expression + ')';
                 const result = evaluateExp(formatExpressionForEvaluation(trial));
                 inputDis.value = formatExpressionForDisplay(trial + ' = ' + result);
+                intermediateResult = result;
             } catch (error) {
                 inputDis.value = formatExpressionForDisplay(inputEl.value);
             }
@@ -274,7 +321,7 @@
                 throw Error;
             }
             // If the expression doesn't match the pattern, use the regular math.evaluate
-            return mathPro.evaluate(expression);
+            return mathPro.simplify(expression).toString();
         }
 
         const n = parseInt(match[1]);
@@ -283,10 +330,10 @@
 
         if (operation === 'P') {
             // Permutation: nPm = n! / (n-m)!
-            return mathPro.evaluate(`factorial(${n}) / factorial(${n} - ${m})`);
+            return mathPro.simplify(`factorial(${n}) / factorial(${n} - ${m})`).toString();
         } else if (operation === 'C') {
             // Combination: nCm = n! / (m! * (n-m)!)
-            return mathPro.evaluate(`factorial(${n}) / (factorial(${m}) * factorial(${n} - ${m}))`);
+            return mathPro.simplify(`factorial(${n}) / (factorial(${m}) * factorial(${n} - ${m}))`).toString();
         } else {
             return Error;
         }
@@ -297,19 +344,24 @@
     // Basically, evaluate the input and show the result as output
     function evaluateExpression() {
         try {
-            // Replace 'x' with '*' before evaluation
-            const expression = inputEl.value;
-            console.log("expression:", expression);
-            const result = evaluateExp(formatExpressionForEvaluation(expression));
-            console.log('Intermediate Result:', result); // Add this line for debugging
+            if (inputEl.value === '') {
+                inputDis.value = '';
+                inputEl.value = '';
+            } else {
+                // Replace 'x' with '*' before evaluation
+                const expression = inputEl.value;
+                console.log("expression:", expression);
+                const result = evaluateExp(formatExpressionForEvaluation(expression));
+                console.log('Intermediate Result:', result); // Add this line for debugging
 
-            // Update the inputDis field with the formatted expression using Mathjax
-            console.log('formatted', formatExpressionForDisplay(expression + ' = ' + result));
-            saveToHistory(inputEl.value, result);
-            refreshHistory();
-            inputDis.value = formatExpressionForDisplay(expression + ' = ' + result);
-            inputEl.value = result;
-            previousAns = result;
+                // Update the inputDis field with the formatted expression using Mathjax
+                console.log('formatted', formatExpressionForDisplay(expression + ' = ' + result));
+                saveToHistory(inputEl.value, result);
+                refreshHistory();
+                inputDis.value = formatExpressionForDisplay(expression + ' = ' + result);
+                inputEl.value = formatExpressionForDisplay(result);
+                previousAns = formatExpressionForDisplay(result);
+            }
         } catch (error) {
             console.log(error);
             try {
@@ -319,8 +371,8 @@
                 saveToHistory(trial, result);
                 refreshHistory();
                 inputDis.value = formatExpressionForDisplay(trial + ' = ' + result);
-                inputEl.value = result;
-                previousAns = result;
+                inputEl.value = formatExpressionForDisplay(result);
+                previousAns = formatExpressionForDisplay(result);
             } catch (error) {
                 console.log(error);
                 inputDis.value = '';
@@ -339,7 +391,7 @@
 
     // Function to refresh history, limiting the number of history displayed as 9
     function refreshHistory() {
-        const MAX_HISTORY_ITEMS = 9; // Set the maximum number of history items to display
+        const MAX_HISTORY_ITEMS = 10; // Set the maximum number of history items to display
 
         historyContainer.innerHTML = '';
 
@@ -366,7 +418,10 @@
     }
 
     function truncate(str, maxLength) {
-        return str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
+        try {
+            return str.length > maxLength ? str.slice(0, maxLength - 3) + '...' : str;
+        } catch (error) {
+            console.log(error);
+        }
     }
-
 });
