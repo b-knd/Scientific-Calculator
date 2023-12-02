@@ -1,6 +1,7 @@
  #input,
 #output {
     padding: 0.5em;
+    font-size: 150%;
 }
 
 #input {
@@ -23,7 +24,7 @@ h6 {
 
 #calculator {
     font-family: 'Ubuntu Mono', monospace;
-    font-size: 150%;
+    font-size: 100%;
     margin: 0;
     background-color: rgb(50, 50, 50);
     color: white;
@@ -79,7 +80,6 @@ h1, h2, h3, h4, h5, h6 {
     overflow-x: hidden;
 }
 
-button,
 input {
     font: inherit;
     color: inherit;
@@ -87,13 +87,30 @@ input {
     border: none;
 }
 
+button {
+    font: inherit;
+    color: inherit;
+    background-color: inherit;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Only transitioning transform */
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Box shadow always present */
+}
+
+button:active {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transform: translate(0, 5px);
+}
+
 .modeButtons {
     display: flex;
 
 }
 
-.angleFormat, .fracDec, .numSys {
-    font-size: 80%;
+.angleFormat, .fracDec, .numSys, .mathBase, .alpha {
+    font-size: 90%;
     display: flex;
     align-self: flex-start;
     margin-top: 15px;
@@ -101,11 +118,27 @@ input {
     margin-right: 20px;
 }
 
-.angleFormat button, .fracDec button, .numSys button {
+.angleFormat button, .fracDec button, .numSys button, .mathBase button{
     color: white;
-    font-size: 100%;
     border: 2px solid rgb(60, 60, 60);
     padding: 0px 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Only transitioning transform */
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Box shadow always present */
+}
+
+.alpha {
+    font-size: 90%;
+    border-radius: 10px 10px 10px 10px;
+    color: darkslateblue;
+    background-color: tan;
+    border: 2px solid rgb(60, 60, 60);
+    padding: 0px 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease; /* Only transitioning transform */
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Box shadow always present */
 }
 
 .leftButton {
@@ -132,14 +165,25 @@ input {
     flex-grow: 1;
     gap: 20px;
     margin-bottom: 20px;
+    font-size: 120%;
 }
+
+.alphabets {
+    font-size: 90%;
+    color: tan;
+    position: absolute;
+    top: 0;
+    right: 10%;
+}
+
+
 
 .complexButtons {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     flex-grow: 1;
+    margin-bottom: 10px;
     gap: 20px;
-    margin-bottom: 20px;
 }
 
 .complexButtons button {
@@ -165,13 +209,12 @@ input {
     background-color: whitesmoke;
 }
 
-
 .historyItem {
     border-bottom: 1px solid rgb(100, 100, 100);
     padding-left: 1em;
     padding-right: 1em;
     color: grey;
-    font-size: 60%;
+    font-size: 95%;
 }
 
 .historyItem>*:first-child {

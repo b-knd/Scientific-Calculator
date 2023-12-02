@@ -30,7 +30,7 @@ body {
 .navbar-brand {
     font-size: 25px;
     color: navajowhite !important;
-    font-family: 'Ubuntu Mono', monospace;
+    font-family: '', monospace;
 }
 
 .nav-link {

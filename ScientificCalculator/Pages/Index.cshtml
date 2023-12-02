@@ -22,6 +22,10 @@
             <input type="text" id="input" placeholder="Input">
 
             <div class="modeButtons basic">
+                <div class="alphabetic">
+                    <button id="alpha" class="alpha">ALPHA</button>
+                </div>
+
                 <div class="angleFormat">
                     <button id="radButton" class="leftButton">RAD</button>
                     <button id="degButton" class="rightButton">DEG</button>
@@ -32,6 +36,11 @@
                     <button id="deciButton" class="rightButton">DEC</button>
                 </div>
 
+                <div class="mathBase">
+                    <button id="mathButton" class="leftButton">MATH</button>
+                    <button id="baseButton" class="rightButton">BASE-N</button>
+                </div>
+
                 <div class="numSys">
                     <button id="binButton" class="leftButton">BIN</button>
                     <button id="octButton" class="middleButton">OCT</button>
@@ -40,79 +49,158 @@
                 </div>
             </div>
 
-            <div class="buttons">
+            <div class="buttons" disabled="false">
                 <div class="complexButtons">
-                    <button>x!</button>
-                    <button>nPr</button>
-                    <button>nCr</button>
-                    <button>%</button>
-                    <button>π</button>
-                    <button>abs</button>
 
-                    <button>&#8730;x</button>
-                    <button>∛x</button>
-                    <button>x<sup>2</sup></button>
-                    <button>x<sup>Y</sup></button>
-                    <button>x<sup>-1</sup></button>
-                    <button>dy/dx</button>
+                    <button data-value="a">
+                        <label class="alphabets">a</label>
+                        x!
+                    </button>
+                    <button data-value="b">
+                        <label class="alphabets">b</label>
+                        nPr
+                    </button>
+                    <button data-value="c">
+                        <label class="alphabets">c</label>
+                        nCr
+                    </button>
+                    <button data-value="d">
+                        <label class="alphabets">d</label>
+                        %
+                    </button>
+                    <button data-value="e">
+                        <label class="alphabets">e</label>
+                        (-)
+                    </button>
+                    <button data-value="f">
+                        <label class="alphabets">f</label>
+                        abs
+                    </button>
 
-                    <button>sin</button>
-                    <button>cos</button>
-                    <button>tan</button>
-                    <button>log</button>
-                    <button>ln</button>
-                    <button>e<sup>x</sup></button>
+                    <button data-value="g">
+                        <label class="alphabets">g</label>
+                        √
+                    </button>
+                    <button data-value="h">
+                        <label class="alphabets">h</label>
+                        ∛
+                    </button>
+                    <button data-value="i">
+                        <label class="alphabets">i</label>
+                        x<sup>2</sup>
+                    </button>
+                    <button data-value="j">
+                        <label class="alphabets">j</label>
+                        x<sup>Y</sup>
+                    </button>
+                    <button data-value="k">
+                        <label class="alphabets">k</label>
+                        x<sup>-1</sup>
+                    </button>
+                    <button data-value="l">
+                        <label class="alphabets">l</label>
+                        dy/dx
+                    </button>
 
-                    <button>sinh</button>
-                    <button>cosh</button>
-                    <button>tanh</button>
-                    <button>sin<sup>-1</sup></button>
-                    <button>cos<sup>-1</sup></button>
-                    <button>tan<sup>-1</sup></button>
+                    <button data-value="m">
+                        <label class="alphabets">m</label>
+                        sin
+                    </button>
+                    <button data-value="n">
+                        <label class="alphabets">n</label>
+                        cos
+                    </button>
+                    <button data-value="o">
+                        <label class="alphabets">o</label>
+                        tan
+                    </button>
+                    <button data-value="p">
+                        <label class="alphabets">p</label>
+                        log
+                    </button>
+                    <button data-value="q">
+                        <label class="alphabets">q</label>
+                        ln
+                    </button>
+                    <button data-value="r">
+                        <label class="alphabets">r</label>
+                        e<sup>x</sup>
+                    </button>
 
-                    <button class="basic">AND</button>
-                    <button class="basic">OR</button>
-                    <button class="basic">XOR</button>
-                    <button class="basic">NOT</button>
-                    <button class="basic"><<</button>
-                    <button class="basic">>></button>
+                    <button data-value="s">
+                        <label class="alphabets">s</label>
+                        sinh
+                    </button>
+                    <button data-value="t">
+                        <label class="alphabets">t</label>
+                        cosh
+                    </button>
+                    <button data-value="u">
+                        <label class="alphabets">u</label>
+                        tanh
+                    </button>
+                    <button data-value="v">
+                        <label class="alphabets">v</label>
+                        sin<sup>-1</sup>
+                    </button>
+                    <button data-value="w">
+                        <label class="alphabets">w</label>
+                        cos<sup>-1</sup>
+                    </button>
+                    <button data-value="x">
+                        <label class="alphabets">x</label>
+                        tan<sup>-1</sup>
+                    </button>
 
-                    <button class="hexa">A</button>
-                    <button class="hexa">B</button>
-                    <button class="hexa">C</button>
-                    <button class="hexa">D</button>
-                    <button class="hexa">E</button>
-                    <button class="hexa">F</button>
+                    <button class="base basic">AND</button>
+                    <button class="base basic">OR</button>
+                    <button class="base basic">XOR</button>
+                    <button class="base basic">NOT</button>
+                    <button class="base basic"><<</button>
+                    <button class="base basic">>></button>
+
+                    <button class="base hexa">A</button>
+                    <button class="base hexa">B</button>
+                    <button class="base hexa">C</button>
+                    <button class="base hexa">D</button>
+                    <button class="base hexa">E</button>
+                    <button class="base hexa">F</button>
 
                 </div>
 
                 <div class="basicButtons">
-                    <button>M+</button>
-                    <button>M-</button>
-                    <button>MR</button>
+                    <button data-value="y">
+                        <label class="alphabets">y</label>
+                        M+
+                    </button>
+                    <button data-value="z">
+                        <label class="alphabets">z</label>
+                        M-
+                    </button>                    <button>MR</button>
                     <button class="basic">(</button>
                     <button class="basic">)</button>
 
-                    <button class="greyButton hexa octal">7</button>
-                    <button class="greyButton hexa">8</button>
-                    <button class="greyButton hexa">9</button>
-                    <button class="greyButton basic">DEL</button>
-                    <button class="greyButton basic">CLR</button>
+                    <button class="greyButton octal hexa dec">7</button>
+                    <button class="greyButton hexa dec">8</button>
+                    <button class="greyButton hexa dec">9</button>
+                    <button class="greyButton basic dec">DEL</button>
+                    <button class="greyButton basic dec">CLR</button>
 
-                    <button class="greyButton hexa octal">4</button>
-                    <button class="greyButton hexa octal">5</button>
-                    <button class="greyButton hexa octal">6</button>
-                    <button class="whiteButton basic">x</button>
-                    <button class="whiteButton basic">&#247</button>
 
-                    <button class="greyButton binary hexa octal">1</button>
-                    <button class="greyButton hexa octal">2</button>
-                    <button class="greyButton hexa octal">3</button>
+                    <button class="greyButton octal hexa dec">4</button>
+                    <button class="greyButton octal hexa dec">5</button>
+                    <button class="greyButton octal hexa dec">6</button>
+                    <button class="whiteButton basic dec">x</button>
+                    <button class="whiteButton basic dec">&#247</button>
+
+                    <button class="greyButton bin octal hexa dec">1</button>
+                    <button class="greyButton octal hexa dec">2</button>
+                    <button class="greyButton octal hexa dec">3</button>
                     <button class="whiteButton basic">+</button>
-                    <button class="whiteButton basic ">-</button>
+                    <button class="whiteButton basic">-</button>
 
-                    <button class="greyButton basic">(-)</button>
-                    <button class="greyButton binary hexa octal">0</button>
+                    <button class="greyButton">π</button>
+                    <button class="greyButton bin hexa octal dec">0</button>
                     <button class="greyButton">.</button>
                     <button class="blueButton basic">Ans</button>
                     <button class="blueButton basic">=</button>
