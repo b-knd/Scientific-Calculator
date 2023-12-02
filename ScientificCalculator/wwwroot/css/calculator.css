@@ -109,7 +109,7 @@ button:active {
 
 }
 
-.angleFormat, .fracDec, .numSys, .mathBase, .alpha {
+.angleFormat, .fracDec, .numSys, .mathBase, .alphaButton {
     font-size: 90%;
     display: flex;
     align-self: flex-start;
@@ -118,7 +118,7 @@ button:active {
     margin-right: 20px;
 }
 
-.angleFormat button, .fracDec button, .numSys button, .mathBase button{
+.angleFormat button, .fracDec button, .numSys button, .mathBase button, .alphaButton button{
     color: white;
     border: 2px solid rgb(60, 60, 60);
     padding: 0px 10px;
@@ -128,7 +128,7 @@ button:active {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Box shadow always present */
 }
 
-.alpha {
+.alphaButton {
     font-size: 90%;
     border-radius: 10px 10px 10px 10px;
     color: darkslateblue;

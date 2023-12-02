@@ -1,4 +1,5 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
+    //all the important variables used in the script
     const buttons = document.querySelectorAll('.buttons button');
     const inputDis = document.getElementById('output');
     let previousAns = '';
@@ -18,6 +19,8 @@
     const mathButton = document.getElementById('mathButton');
     const baseButton = document.getElementById('baseButton');
     const numSysButtons = document.querySelectorAll('.numSys button');
+    const alphaButton = document.getElementById('alphaButton');
+    let isAlpha = false;
     const mathPro = math.create();
 
 
@@ -34,6 +37,14 @@
         selectedAngleMode = 'radians';
         updateAngleModeStyles();
         // Handle other actions as needed
+    });
+
+    alphaButton.addEventListener('click', function () {
+        if (isAlpha) {
+            isAlpha = false;
+        } else {
+            isAlpha = true;
+        }
     });
 
     // Event listener for the degree button
@@ -72,6 +83,8 @@
     // Event listener for the radian button
     binButton.addEventListener('click', function () {
         selectedNumSys = 'bin';
+        inputEl.value = '';
+        inputDis.value = '';
         updateNumSys();
     });
 
@@ -84,12 +97,16 @@
     // Event listener for the degree button
     hexButton.addEventListener('click', function () {
         selectedNumSys = 'hex';
+        inputEl.value = '';
+        inputDis.value = '';
         updateNumSys();
     });
 
     // Event listener for the degree button
     octButton.addEventListener('click', function () {
         selectedNumSys = 'oct';
+        inputEl.value = '';
+        inputDis.value = '';
         updateNumSys();
     });
 
@@ -143,88 +160,97 @@
         button.addEventListener('pointerdown', function () {
             const symbol = button.innerText;
 
-            if (symbol === '=') {
-                evaluateExpression();
-            } else if (symbol === 'CLR') {
-                inputDis.value = '';
-                inputEl.value = '';
-            } else if (symbol === 'S⇔D') {
-
-            } else {
-                if (inputEl.value === 'Syntax Error') {
-                    inputEl.value = '';
-                }
-                if (symbol === 'DEL') {
-                    const startPos = inputEl.selectionStart;
-                    const endPos = inputEl.selectionEnd;
-
-                    if (startPos === endPos) {
-                        // If no text is selected, delete the character to the left of the caret
-                        inputEl.value = inputEl.value.substring(0, startPos - 1) + inputEl.value.substring(endPos, inputEl.value.length);
-                        inputEl.selectionStart = startPos - 1;
-                        inputEl.selectionEnd = startPos - 1;
-                    } else {
-                        // If text is selected, delete the selected text
-                        inputEl.value = inputEl.value.substring(0, startPos) + inputEl.value.substring(endPos, inputEl.value.length);
-                        inputEl.selectionStart = startPos;
-                        inputEl.selectionEnd = startPos;
-                    }
-                } else if (symbol === 'Ans') {
-                    insertAtCaret(inputEl, previousAns);
-                } else if (symbol === 'MR') {
-                    inputDis.value += memoryStack;
-                    insertAtCaret(inputEl, memoryStack);
-                } else if (symbol === 'AND') {
-                    insertAtCaret(inputEl, '&');
-                } else if (symbol === 'OR') {
-                    insertAtCaret(inputEl, '|');
-                } else if (symbol === 'XOR') {
-                    insertAtCaret(inputEl, '^');
-                } else if (symbol === 'NOT') {
-                    insertAtCaret(inputEl, '~');
-                } else if (symbol === 'msin' || symbol === 'ncos' || symbol === 'otan' || symbol === 'plog' || symbol === 'qln'
-                    || symbol === 'ssinh' || symbol === 'utanh' || symbol === 'tcosh' || symbol === 'fabs') {
-                    insertAtCaret(inputEl, `${symbol}(`);
-                } else if (symbol === 'vsin-1') {
-                    insertAtCaret(inputEl, 'asin(');
-                } else if (symbol === 'wcos-1') {
-                    insertAtCaret(inputEl, 'acos(')
-                } else if (symbol === 'xtan-1') {
-                    insertAtCaret(inputEl, 'atan(')
-                } else if (symbol === 'ldy/dx') {
-                    insertAtCaret(inputEl, 'derivative(\'\', \'x\')');
-                } else if (symbol === 'x') {
-                    insertAtCaret(inputEl, '*');
-                } else if (symbol === '÷') {
-                    insertAtCaret(inputEl, '/');
-                } else if (symbol === 'ax!') {
-                    insertAtCaret(inputEl, '!');
-                } else if (symbol === 'e(-)') {
-                    insertAtCaret(inputEl, '-');
-                } else if (symbol === 'g√x') {
-                    insertAtCaret(inputEl, 'sqrt(');
-                } else if (symbol === 'h∛x') {
-                    insertAtCaret(inputEl, 'cbrt(');
-                } else if (symbol === 'ix2') {
-                    insertAtCaret(inputEl, '^2');
-                } else if (symbol === 'jxY') {
-                    insertAtCaret(inputEl, '^(');
-                } else if (symbol === 'rex') {
-                    insertAtCaret(inputEl, 'e^');
-                } else if (symbol === 'kx-1') {
-                    insertAtCaret(inputEl, '^(-1)');
-                } else if (symbol === 'bnPr') {
-                    insertAtCaret(inputEl, 'P');
-                } else if (symbol === 'cnCr') {
-                    insertAtCaret(inputEl, 'C');
-                } else if (symbol === 'yM+') {
-                    memoryStack += intermediateResult;
-                } else if (symbol === 'zM-') {
-                    memoryStack -= intermediateResult;
-                } else {
-                    insertAtCaret(inputEl, symbol);
-                }
+            if (isAlpha && button.hasAttribute('data-value')) {
+                var dataValue = button.getAttribute('data-value');
+                isAlpha = false;
+                insertAtCaret(inputEl, dataValue.charAt(0));
                 evaluateIntermediate();
+            } else {
+                if (symbol === '=') {
+                    evaluateExpression();
+                } else if (symbol === 'CLR') {
+                    inputDis.value = '';
+                    inputEl.value = '';
+                } else if (symbol === 'S⇔D') {
+
+                } else {
+                    if (inputEl.value === 'Syntax Error') {
+                        inputEl.value = '';
+                    }
+                    if (symbol === 'DEL') {
+                        const startPos = inputEl.selectionStart;
+                        const endPos = inputEl.selectionEnd;
+
+                        if (startPos === endPos) {
+                            // If no text is selected, delete the character to the left of the caret
+                            inputEl.value = inputEl.value.substring(0, startPos - 1) + inputEl.value.substring(endPos, inputEl.value.length);
+                            inputEl.selectionStart = startPos - 1;
+                            inputEl.selectionEnd = startPos - 1;
+                        } else {
+                            // If text is selected, delete the selected text
+                            inputEl.value = inputEl.value.substring(0, startPos) + inputEl.value.substring(endPos, inputEl.value.length);
+                            inputEl.selectionStart = startPos;
+                            inputEl.selectionEnd = startPos;
+                        }
+                    } else if (symbol === 'Ans') {
+                        insertAtCaret(inputEl, previousAns);
+                    } else if (symbol === 'MR') {
+                        inputDis.value += memoryStack;
+                        insertAtCaret(inputEl, memoryStack);
+                    } else if (symbol === 'AND') {
+                        insertAtCaret(inputEl, '&');
+                    } else if (symbol === 'OR') {
+                        insertAtCaret(inputEl, '|');
+                    } else if (symbol === 'XOR') {
+                        insertAtCaret(inputEl, '^');
+                    } else if (symbol === 'NOT') {
+                        insertAtCaret(inputEl, '~');
+                    } else if (symbol === 'm sin' || symbol === 'n cos' || symbol === 'o tan' || symbol === 'p log' || symbol === 'q ln'
+                        || symbol === 's sinh' || symbol === 'u tanh' || symbol === 't cosh' || symbol === 'f abs') {
+                        insertAtCaret(inputEl, `${symbol.substring(2)}(`);
+                    } else if (symbol === 'v sin-1') {
+                        insertAtCaret(inputEl, 'asin(');
+                    } else if (symbol === 'w cos-1') {
+                        insertAtCaret(inputEl, 'acos(')
+                    } else if (symbol === 'x tan-1') {
+                        insertAtCaret(inputEl, 'atan(')
+                    } else if (symbol === 'l dy/dx') {
+                        insertAtCaret(inputEl, 'derivative(\'\', \'x\')');
+                    } else if (symbol === 'x') {
+                        insertAtCaret(inputEl, '*');
+                    } else if (symbol === '÷') {
+                        insertAtCaret(inputEl, '/');
+                    } else if (symbol === 'a x!') {
+                        insertAtCaret(inputEl, '!');
+                    } else if (symbol === 'e (-)') {
+                        insertAtCaret(inputEl, '-');
+                    } else if (symbol === 'g √x') {
+                        insertAtCaret(inputEl, 'sqrt(');
+                    } else if (symbol === 'h ∛x') {
+                        insertAtCaret(inputEl, 'cbrt(');
+                    } else if (symbol === 'i x2') {
+                        insertAtCaret(inputEl, '^2');
+                    } else if (symbol === 'j xY') {
+                        insertAtCaret(inputEl, '^(');
+                    } else if (symbol === 'r ex') {
+                        insertAtCaret(inputEl, 'e^');
+                    } else if (symbol === 'k x-1') {
+                        insertAtCaret(inputEl, '^(-1)');
+                    } else if (symbol === 'b nPr') {
+                        insertAtCaret(inputEl, 'P');
+                    } else if (symbol === 'c nCr') {
+                        insertAtCaret(inputEl, 'C');
+                    } else if (symbol === 'y M+') {
+                        memoryStack += intermediateResult;
+                    } else if (symbol === 'z M-') {
+                        memoryStack -= intermediateResult;
+                    } else if (symbol === 'd %') {
+                        insertAtCaret(inputEl, '%');
+                    } else {
+                        insertAtCaret(inputEl, symbol);
+                    }
+                    evaluateIntermediate();
+                }
             }
         });
     }
@@ -296,6 +322,7 @@
 
     function evaluateExp(expression) {
         if (selectedNumSys != 'dec') {
+            
             const numberRegex = /\b\d+\b/g;
             base = 10;
             if (selectedNumSys === 'bin') {
@@ -305,6 +332,8 @@
             } else {
                 base = 8;
             }
+            expression = simplifyBitwiseOperations(expression, base);
+            console.log("outfunction:", expression)
             if (base === 2 || base === 8){
                 converted = expression.replace(numberRegex, match => parseInt(match, base));
             } else {
@@ -551,4 +580,33 @@
 
         return result;
     }
+
+
+    function simplifyBitwiseOperations(expression, base) {
+        // Replace spaces and convert to uppercase for consistency
+        expression = expression.replace(/\s/g, '').toUpperCase();
+
+        // Process NOT operations
+        if (base == 2) {
+            expression = expression.replace(/~(\d+)/g, (_, group) => ((~(parseInt(group, base)))>>> 0).toString(base));
+            //if we are doing 32-bit
+
+        } else {
+            expression = expression.replace(/~(\d+)/g, (_, group) => (~(parseInt(group, base))));
+        }
+        
+
+        // Process AND operations
+        expression = expression.replace(/(\d+)&(\d+)/g, (_, group1, group2) => (parseInt(group1, base) & parseInt(group2, base)).toString(base));
+
+        // Process XOR operations
+        expression = expression.replace(/(\d+)\^(\d+)/g, (_, group1, group2) => (parseInt(group1, base) ^ parseInt(group2, base)).toString(base));
+
+        // Process OR operations
+        expression = expression.replace(/(\d+)\|(\d+)/g, (_, group1, group2) => (parseInt(group1, base) | parseInt(group2, base)).toString(base));
+
+        console.log("in function: ", expression);
+        return expression;
+    }
+    
 });
