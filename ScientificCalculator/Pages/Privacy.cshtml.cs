@@ -1,20 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ScientificCalculator.Pages;
-
-public class PrivacyModel : PageModel
+namespace ScientificCalculator.Pages
 {
-    private readonly ILogger<PrivacyModel> _logger;
 
-    public PrivacyModel(ILogger<PrivacyModel> logger)
+    public class AboutModel : PageModel
     {
-        _logger = logger;
-    }
-
-    public void OnGet()
-    {
+        public void OnGet()
+        {
+        }
     }
 }
-
-
