@@ -3,6 +3,7 @@
     const buttons = document.querySelectorAll('.buttons button');
     const inputDis = document.getElementById('output');
     let previousAns = '';
+    let previousInput = '';
     let memoryStack = 0;
     let intermediateResult = 0;
     const inputEl = document.getElementById('input');
@@ -151,9 +152,9 @@
                         evaluateExpression();
                     } else if (symbol === 'CLR') {
                         clearInputs();
-                    } else if (symbol === 'y M+') {
+                    } else if (symbol === 'yM+') {
                         memoryIn(intermediateResult);
-                    } else if (symbol === 'z M-') {
+                    } else if (symbol === 'zM-') {
                         memoryOut(intermediateResult);
                     } else {
                         if (inputEl.value === 'Syntax Error') {
@@ -186,7 +187,7 @@
                             insertAtCaret(inputEl, '^');
                         } else if (symbol === 'NOT') {
                             insertAtCaret(inputEl, '~');
-                        } else if (symbol === 'm sin' || symbol === 'ncos' || symbol === 'otan'
+                        } else if (symbol === 'msin' || symbol === 'ncos' || symbol === 'otan'
                             || symbol === 'plog' || symbol === 'qln' || symbol === 'fabs'
                             || symbol === 'ssinh' || symbol === 'utanh' || symbol === 'tcosh') {
                             insertAtCaret(inputEl, `${symbol.substring(1)}(`);
