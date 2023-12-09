@@ -1,4 +1,6 @@
 # COMP3207-Coursework: Scientific Calculator Cloud Application
+<img src="https://github.com/b-knd/misc-codes/blob/main/media/Screenshot%202023-12-09%20at%2008.56.57.png" alt="image_description" width="1000"/>
+
 ## Project Overview
 
 This scientific calculator is a web application built using JavaScript, HTML, and CSS for the COMP3207 Cloud Application Development module in my third year of computer science studies. It functions as a complete scientific calculator, performing all basic and advanced calculations, including:
