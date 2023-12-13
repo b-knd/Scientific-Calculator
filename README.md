@@ -31,7 +31,7 @@ This scientific calculator is a web application built using JavaScript, HTML, an
 * **User interface design**: Design user-friendly and responsive interfaces.
 * **Cloud application development**: Deploy applications on cloud platforms.
 
-* ## Possible Future Enhancements
+## Possible Future Enhancements
 
 * Implement complex scientific functions, such as integration and limits.
 * Add graphing capabilities to visualize mathematical functions.
